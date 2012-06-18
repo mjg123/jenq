@@ -3,10 +3,25 @@
   <head>
     <title>Jenq loading</title>
     <style type="text/css">
-      #jenkins-finder {
-      }
-
-      .invisible { display: none; }
+      body { background-color: #888;
+             font-family: sans; }
+      a { text-decoration: none;
+          color: inherit; }
+      a:hover { text-decoration: underline; }
+      .invisible { display:none; }
+      .job { width: 200px; 
+             height: 5em; 
+             padding-top: 3em;
+             border: 1px solid black; 
+             float: left; 
+             margin: 10px;
+             border-radius: 10px;
+             text-align: center;
+             box-shadow: 0 0 8px 8px #777; }
+      .pass {background-color:#AFA;}
+      .fail {background-color:#FAA;}
+      .disabled {background-color:#AAA;}
+      .unknown {background-color:#AAF;}
     </style>
   </head>
   <body>
@@ -16,6 +31,8 @@
       <input id="jenkins-url" placeholder="http://my-jenkins:8080">
       <input id="load-jenk" type="button" value="load my jenk!"/>
     </div>
+
+    <div id="jobs"></div>
 
     <script type="text/javascript" src="jenq.js"></script>
   </body>

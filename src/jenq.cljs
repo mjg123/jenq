@@ -1,10 +1,12 @@
 (ns jenq
-  (:use [domina :only [remove-class! add-class! by-id value]]
-        [domina.events :only [listen!]]))
+  (:use [domina :only [remove-class! add-class! by-id value append!]]
+        [domina.events :only [listen!]])
+  (:require [goog.net.Jsonp :as jsonp]))
 
 (defn log [msg] (.log js/console msg))
 (def encode (aget js/window "encodeURIComponent"))
 (def decode (aget js/window "decodeURIComponent"))
+
 
 ;; Event listeners
 
@@ -46,8 +48,29 @@
 
 ;; Jenkins job loader
 
+(defn job-class [status]
+  (get {"blue" "pass"
+        "red" "fail"
+        "disabled" "disabled"}
+       status "unknown"))
+
+
+(defn add-job [{name :name color :color url :url}]
+  (let [job-box (append! (by-id "jobs")
+                         (str "<div class=\"job " (job-class color) "\">"
+                              "<a href=\"" url "\">" name "</a></div>"))]))
+
+(defn jobs-jsonp-cb [json-obj]
+  (let [data (js->clj json-obj :keywordize-keys true)]
+    (doall (map add-job (:jobs data)))))
+
+(defn jenkins-jobs-jsonp [url]
+  (.send (goog.net.Jsonp. url "jsonp")
+         "" jobs-jsonp-cb log))
+
 (defn load-jenkins-jobs [baseurl]
-  (log (str "Loading from " baseurl)))
+  (log (str "Loading from " baseurl))
+  (jenkins-jobs-jsonp (str baseurl "/api/json")))
 
 
 ;; let's go!
@@ -58,6 +81,5 @@
   (if (:url (parse-hash))
     (load-jenkins-jobs (:url (parse-hash)))
     (show-jenkins-finder)))
-
 
 (start-jenq)
