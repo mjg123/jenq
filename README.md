@@ -10,7 +10,7 @@ What makes this different:
 
 ## Usage
 
-Just go here: (TBD)
+Just go here: http://mjg123.github.com/jenq/out/jenq.html
 
 Or download and host it somewhere yourself.  Works from file:// URLs.
 
