@@ -19,3 +19,9 @@ Or download and host it somewhere yourself.  Works fine from file:// URLs.
 Copyright © 2012 Matthew James Gilliard
 
 Distributed under the Eclipse Public License, the same as Clojure.
+
+## TODO
+
+ - Autorefresh
+ - Shareable URLs to work on firefox
+ - remove individual jobs
