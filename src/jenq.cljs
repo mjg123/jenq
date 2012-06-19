@@ -18,7 +18,7 @@
 ;; Hash-bang shennanigans
 
 (defn parse-hash
-  "assumes a url like .../jenq.html/#/http://jenkins:9000/"
+  "assumes a url like .../jenq.html/#/httpjenkins:9000/"
   []
   (let [hash (subs (.toString window.location.hash ()) 1)
         parts (next (.split hash "/"))]
@@ -51,9 +51,9 @@
 (defn job-class [status]
   (get {"blue" "pass"
         "red" "fail"
+        "yellow" "amber"
         "disabled" "disabled"}
        status "unknown"))
-
 
 (defn add-job [{name :name color :color url :url}]
   (let [job-box (append! (by-id "jobs")
