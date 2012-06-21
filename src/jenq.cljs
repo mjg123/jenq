@@ -18,9 +18,9 @@
 ;; Hash-bang shennanigans
 
 (defn parse-hash
-  "assumes a url like .../jenq.html/#/httpjenkins:9000/"
+  "assumes a url like .../jenq.html/#/http://jenkins:9000/"
   []
-  (let [hash (subs (.toString window.location.hash ()) 1)
+  (let [hash (get (.split (.toString window.location ()) "#") 1)
         parts (next (.split hash "/"))]
     (zipmap [:url] (map decode parts))))
 
