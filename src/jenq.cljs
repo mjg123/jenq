@@ -20,9 +20,15 @@
 (defn parse-hash
   "assumes a url like .../jenq.html/#/http://jenkins:9000/"
   []
-  (let [hash (get (.split (.toString window.location ()) "#") 1)
-        parts (next (.split hash "/"))]
-    (zipmap [:url] (map decode parts))))
+  (let [hash (-> window.location
+                 (.toString ())
+                 (.split "#")
+                 (get 1))]
+    
+    (if hash
+      (zipmap [:url]
+              (map decode (next (.split hash "/"))))
+      {})))
 
 (defn set-hash! [jenkins-url]
   (let [hash (str "#LEEROY!/" (encode jenkins-url))]
@@ -58,11 +64,18 @@
 (defn add-job [{name :name color :color url :url}]
   (let [job-box (append! (by-id "jobs")
                          (str "<div class=\"job " (job-class color) "\">"
-                              "<a href=\"" url "\">" name "</a></div>"))]))
+                              "<a target=\"_blank\" href=\"" url "\">" name "</a></div>"))]))
+
+(defn count-passes [jobs]
+  (count (filter #(= "blue" %) (map :color jobs))))
 
 (defn jobs-jsonp-cb [json-obj]
   (let [data (js->clj json-obj :keywordize-keys true)]
-    (doall (map add-job (:jobs data)))))
+    (doall (map add-job (:jobs data)))
+    (set! document.title (str "Jenq :: "
+                              (count-passes (:jobs data))
+                              "/"
+                              (count (:jobs data))))))
 
 (defn jenkins-jobs-jsonp [url]
   (.send (goog.net.Jsonp. url "jsonp")

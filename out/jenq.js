@@ -26163,13 +26163,16 @@ jenq.add_listeners = function add_listeners() {
   return domina.events.listen_BANG_.call(null, domina.by_id.call(null, "load-jenk"), "\ufdd0'click", jenq.load_jenkins_cb)
 };
 jenq.parse_hash = function parse_hash() {
-  var hash__13846 = cljs.core.get.call(null, window.location.toString(cljs.core.List.EMPTY).split("#"), 1);
-  var parts__13847 = cljs.core.next.call(null, hash__13846.split("/"));
-  return cljs.core.zipmap.call(null, cljs.core.PersistentVector.fromArray(["\ufdd0'url"]), cljs.core.map.call(null, jenq.decode, parts__13847))
+  var hash__41099 = cljs.core.get.call(null, window.location.toString(cljs.core.List.EMPTY).split("#"), 1);
+  if(cljs.core.truth_(hash__41099)) {
+    return cljs.core.zipmap.call(null, cljs.core.PersistentVector.fromArray(["\ufdd0'url"]), cljs.core.map.call(null, jenq.decode, cljs.core.next.call(null, hash__41099.split("/"))))
+  }else {
+    return cljs.core.ObjMap.fromObject([], {})
+  }
 };
 jenq.set_hash_BANG_ = function set_hash_BANG_(jenkins_url) {
-  var hash__13848 = [cljs.core.str("#LEEROY!/"), cljs.core.str(jenq.encode.call(null, jenkins_url))].join("");
-  return window.location.hash = hash__13848
+  var hash__41100 = [cljs.core.str("#LEEROY!/"), cljs.core.str(jenq.encode.call(null, jenkins_url))].join("");
+  return window.location.hash = hash__41100
 };
 jenq.show_jenkins_finder = function show_jenkins_finder() {
   return domina.remove_class_BANG_.call(null, domina.by_id.call(null, "jenkins-finder"), "invisible")
@@ -26178,26 +26181,32 @@ jenq.hide_jenkins_finder = function hide_jenkins_finder() {
   return domina.add_class_BANG_.call(null, domina.by_id.call(null, "jenkins-finder"), "invisible")
 };
 jenq.load_jenkins_cb = function load_jenkins_cb() {
-  var url__13849 = domina.value.call(null, domina.by_id.call(null, "jenkins-url"));
-  jenq.set_hash_BANG_.call(null, url__13849);
+  var url__41101 = domina.value.call(null, domina.by_id.call(null, "jenkins-url"));
+  jenq.set_hash_BANG_.call(null, url__41101);
   jenq.hide_jenkins_finder.call(null);
-  return jenq.load_jenkins_jobs.call(null, url__13849)
+  return jenq.load_jenkins_jobs.call(null, url__41101)
 };
 jenq.job_class = function job_class(status) {
   return cljs.core.get.call(null, cljs.core.ObjMap.fromObject(["blue", "red", "yellow", "disabled"], {"blue":"pass", "red":"fail", "yellow":"amber", "disabled":"disabled"}), status, "unknown")
 };
-jenq.add_job = function add_job(p__13850) {
-  var map__13851__13852 = p__13850;
-  var map__13851__13853 = cljs.core.seq_QMARK_.call(null, map__13851__13852) ? cljs.core.apply.call(null, cljs.core.hash_map, map__13851__13852) : map__13851__13852;
-  var name__13854 = cljs.core.get.call(null, map__13851__13853, "\ufdd0'name");
-  var color__13855 = cljs.core.get.call(null, map__13851__13853, "\ufdd0'color");
-  var url__13856 = cljs.core.get.call(null, map__13851__13853, "\ufdd0'url");
-  var job_box__13857 = domina.append_BANG_.call(null, domina.by_id.call(null, "jobs"), [cljs.core.str('<div class="job '), cljs.core.str(jenq.job_class.call(null, color__13855)), cljs.core.str('">'), cljs.core.str('<a href="'), cljs.core.str(url__13856), cljs.core.str('">'), cljs.core.str(name__13854), cljs.core.str("</a></div>")].join(""));
+jenq.add_job = function add_job(p__41103) {
+  var map__41104__41105 = p__41103;
+  var map__41104__41106 = cljs.core.seq_QMARK_.call(null, map__41104__41105) ? cljs.core.apply.call(null, cljs.core.hash_map, map__41104__41105) : map__41104__41105;
+  var name__41107 = cljs.core.get.call(null, map__41104__41106, "\ufdd0'name");
+  var color__41108 = cljs.core.get.call(null, map__41104__41106, "\ufdd0'color");
+  var url__41109 = cljs.core.get.call(null, map__41104__41106, "\ufdd0'url");
+  var job_box__41110 = domina.append_BANG_.call(null, domina.by_id.call(null, "jobs"), [cljs.core.str('<div class="job '), cljs.core.str(jenq.job_class.call(null, color__41108)), cljs.core.str('">'), cljs.core.str('<a target="_blank" href="'), cljs.core.str(url__41109), cljs.core.str('">'), cljs.core.str(name__41107), cljs.core.str("</a></div>")].join(""));
   return null
 };
+jenq.count_passes = function count_passes(jobs) {
+  return cljs.core.count.call(null, cljs.core.filter.call(null, function(p1__41102_SHARP_) {
+    return cljs.core._EQ_.call(null, "blue", p1__41102_SHARP_)
+  }, cljs.core.map.call(null, "\ufdd0'color", jobs)))
+};
 jenq.jobs_jsonp_cb = function jobs_jsonp_cb(json_obj) {
-  var data__13858 = cljs.core.js__GT_clj.call(null, json_obj, "\ufdd0'keywordize-keys", true);
-  return cljs.core.doall.call(null, cljs.core.map.call(null, jenq.add_job, "\ufdd0'jobs".call(null, data__13858)))
+  var data__41111 = cljs.core.js__GT_clj.call(null, json_obj, "\ufdd0'keywordize-keys", true);
+  cljs.core.doall.call(null, cljs.core.map.call(null, jenq.add_job, "\ufdd0'jobs".call(null, data__41111)));
+  return document.title = [cljs.core.str("Jenq :: "), cljs.core.str(jenq.count_passes.call(null, "\ufdd0'jobs".call(null, data__41111))), cljs.core.str("/"), cljs.core.str(cljs.core.count.call(null, "\ufdd0'jobs".call(null, data__41111)))].join("")
 };
 jenq.jenkins_jobs_jsonp = function jenkins_jobs_jsonp(url) {
   return(new goog.net.Jsonp(url, "jsonp")).send("", jenq.jobs_jsonp_cb, jenq.log)
