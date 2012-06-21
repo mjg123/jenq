@@ -13,5 +13,5 @@
                         :source-path "src"
                         :compiler {
                                    :output-to "out/jenq.js"
-                                   :optimizations :whitespace
-                                   :pretty-print true}}]})
+                                   :optimizations :advanced
+                                   :pretty-print false}}]})
