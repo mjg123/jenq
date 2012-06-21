@@ -22,6 +22,4 @@ Distributed under the Eclipse Public License, the same as Clojure.
 
 ## TODO
 
- - Autorefresh
- - Shareable URLs to work on firefox
- - remove individual jobs
+ - wtf nothing??
